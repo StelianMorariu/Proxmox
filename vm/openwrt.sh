@@ -51,7 +51,7 @@ function error_handler() {
 function cleanup_vmid() {
   if qm status $VMID &>/dev/null; then
     qm stop $VMID &>/dev/null
-    qm destroy $VMID &>/dev/null
+    # qm destroy $VMID &>/dev/null
   fi
 }
 
@@ -203,10 +203,10 @@ function default_settings() {
   VLAN=""
   MAC=$GEN_MAC
   LAN_MAC=$GEN_MAC_LAN
-  LAN_BRG="vmbr0"
-  LAN_IP_ADDR="192.168.1.1"
+  LAN_BRG="vmbr1"
+  LAN_IP_ADDR="192.168.101.1"
   LAN_NETMASK="255.255.255.0"
-  LAN_VLAN=",tag=999"
+  LAN_VLAN=""
   MTU=""
   START_VM="yes"
   echo -e "${DGN}Using Virtual Machine ID: ${BGN}${VMID}${CL}"
@@ -218,7 +218,7 @@ function default_settings() {
   echo -e "${DGN}Using WAN MAC Address: ${BGN}${MAC}${CL}"
   echo -e "${DGN}Using LAN MAC Address: ${BGN}${LAN_MAC}${CL}"
   echo -e "${DGN}Using LAN Bridge: ${BGN}${LAN_BRG}${CL}"
-  echo -e "${DGN}Using LAN VLAN: ${BGN}999${CL}"
+  echo -e "${DGN}Using LAN VLAN: ${BGN}None${CL}"
   echo -e "${DGN}Using LAN IP Address: ${BGN}${LAN_IP_ADDR}${CL}"
   echo -e "${DGN}Using LAN NETMASK: ${BGN}${LAN_NETMASK}${CL}"
   echo -e "${DGN}Using Interface MTU Size: ${BGN}Default${CL}"
@@ -490,11 +490,11 @@ msg_ok "Network interfaces are being configured as OpenWrt initiates."
 send_line_to_vm ""
 send_line_to_vm "uci delete network.@device[0]"
 send_line_to_vm "uci set network.wan=interface"
-send_line_to_vm "uci set network.wan.device=eth1"
+send_line_to_vm "uci set network.wan.device=eth0"
 send_line_to_vm "uci set network.wan.proto=dhcp"
 send_line_to_vm "uci delete network.lan"
 send_line_to_vm "uci set network.lan=interface"
-send_line_to_vm "uci set network.lan.device=eth0"
+# send_line_to_vm "uci set network.lan.device=eth1"
 send_line_to_vm "uci set network.lan.proto=static"
 send_line_to_vm "uci set network.lan.ipaddr=${LAN_IP_ADDR}"
 send_line_to_vm "uci set network.lan.netmask=${LAN_NETMASK}"
